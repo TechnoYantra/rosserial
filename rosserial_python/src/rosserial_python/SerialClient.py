@@ -224,11 +224,11 @@ class RosSerialServer:
         self.fork_server = fork_server
 
     def listen(self):
-        self.serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.serversocket = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
         self.serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         #bind the socket to a public host, and a well-known port
         self.serversocket.bind(("", self.tcp_portnum)) #become a server socket
-        self.serversocket.listen(1)
+        self.serversocket.listen(10)
         self.serversocket.settimeout(1)
 
         #accept connections
@@ -240,7 +240,7 @@ class RosSerialServer:
                 continue
 
             #now do something with the clientsocket
-            rospy.loginfo("Established a socket connection from %s on port %s" % address)
+            rospy.loginfo("Established a socket connection from {0} on port {0}".format(address))
             self.socket = clientsocket
             self.isConnected = True
 
@@ -282,6 +282,9 @@ class RosSerialServer:
 
     def flushInput(self):
         pass
+
+    def flushOutput(self):
+        pass 
 
     def write(self, data):
         if not self.isConnected:
